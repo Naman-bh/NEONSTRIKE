@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A thrilling browser-based 3D first-person shooter game built with Three.js"
+    />
+    <title>NEON STRIKE — 3D Shooter</title>
+    <link rel="stylesheet" href="/index.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <div class="loader-content">
+        <h1 class="loader-title">NEON STRIKE</h1>
+        <div class="loader-bar-track">
+          <div class="loader-bar-fill" id="loader-bar-fill"></div>
+        </div>
+        <p class="loader-text" id="loader-text">Initializing systems...</p>
+      </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="screen hidden">
+      <div class="menu-content">
+        <h1 class="game-title">
+          NEON<br /><span class="title-accent">STRIKE</span>
+        </h1>
+        <p class="game-subtitle">ENTER THE ARENA</p>
+        <button id="btn-play" class="menu-btn primary-btn">
+          <span class="btn-icon">▶</span> WAVE MODE
+        </button>
+        <button id="btn-aim-training" class="menu-btn aim-btn">
+          🎯 AIM TRAINING
+        </button>
+        <button id="btn-scenarios" class="menu-btn scenario-btn">
+          📋 SCENARIOS
+        </button>
+        <button id="btn-highscores-menu" class="menu-btn">
+          🏆 HIGH SCORES
+        </button>
+        <button id="btn-settings-menu" class="menu-btn">⚙ SETTINGS</button>
+        <div class="controls-hint">
+          <div class="control-row">
+            <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move
+          </div>
+          <div class="control-row"><kbd>Mouse</kbd> Look</div>
+          <div class="control-row"><kbd>Click</kbd> Shoot</div>
+          <div class="control-row"><kbd>R</kbd> Reload</div>
+          <div class="control-row"><kbd>Space</kbd> Jump</div>
+          <div class="control-row"><kbd>Shift</kbd> Sprint</div>
+          <div class="control-row">
+            <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> Switch Weapon
+          </div>
+          <div class="control-row"><kbd>G</kbd> Grenade</div>
+          <div class="control-row"><kbd>Q</kbd> Dash</div>
+          <div class="control-row"><kbd>Esc</kbd> Pause</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aim Training Select -->
+    <div id="aim-select-screen" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="pause-title">AIM TRAINING</h2>
+        <p class="aim-subtitle">Choose your focus:</p>
+        <div class="aim-cards">
+          <button class="aim-card" data-aim-focus="flicking">
+            <div class="aim-card-icon">🎯</div>
+            <div class="aim-card-title">FLICKING</div>
+            <div class="aim-card-desc">Static targets, fast reactions</div>
+          </button>
+          <button class="aim-card" data-aim-focus="tracking">
+            <div class="aim-card-icon">〰️</div>
+            <div class="aim-card-title">TRACKING</div>
+            <div class="aim-card-desc">Moving targets, smooth aim</div>
+          </button>
+          <button class="aim-card" data-aim-focus="precision">
+            <div class="aim-card-icon">🔬</div>
+            <div class="aim-card-title">PRECISION</div>
+            <div class="aim-card-desc">Tiny targets, careful shots</div>
+          </button>
+        </div>
+        <button id="btn-aim-back" class="menu-btn">← BACK</button>
+      </div>
+    </div>
+
+    <!-- Scenario Select -->
+    <div id="scenario-select-screen" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="pause-title">SCENARIOS</h2>
+        <p class="aim-subtitle">Pick a drill:</p>
+        <div class="scenario-grid">
+          <button class="scenario-card" data-scenario="gridshot">
+            <div class="scenario-card-title">GRIDSHOT</div>
+            <div class="scenario-card-desc">Rapid target elimination on a grid wall</div>
+            <div class="scenario-card-meta">60s</div>
+          </button>
+          <button class="scenario-card" data-scenario="strafeDuel">
+            <div class="scenario-card-title">STRAFE DUEL</div>
+            <div class="scenario-card-desc">Track an enemy strafing left and right</div>
+            <div class="scenario-card-meta">60s</div>
+          </button>
+          <button class="scenario-card" data-scenario="anglePeek">
+            <div class="scenario-card-title">ANGLE PEEK</div>
+            <div class="scenario-card-desc">React to enemies peeking from cover</div>
+            <div class="scenario-card-meta">90s</div>
+          </button>
+          <button class="scenario-card" data-scenario="microAdjust">
+            <div class="scenario-card-title">MICRO ADJUST</div>
+            <div class="scenario-card-desc">Tiny targets with minimal movement</div>
+            <div class="scenario-card-meta">60s</div>
+          </button>
+          <button class="scenario-card" data-scenario="flickShot">
+            <div class="scenario-card-title">180 FLICK</div>
+            <div class="scenario-card-desc">Targets spawn all around — spin and shoot</div>
+            <div class="scenario-card-meta">60s</div>
+          </button>
+          <button class="scenario-card" data-scenario="multiTarget">
+            <div class="scenario-card-title">MULTI TARGET</div>
+            <div class="scenario-card-desc">Eliminate groups of enemies fast</div>
+            <div class="scenario-card-meta">90s</div>
+          </button>
+        </div>
+        <button id="btn-scenario-back" class="menu-btn">← BACK</button>
+      </div>
+    </div>
+
+    <!-- Training End Screen -->
+    <div id="training-end-screen" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="gameover-title">TRAINING COMPLETE</h2>
+        <div class="grade-display" id="training-grade">A</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">SCORE</div>
+            <div class="stat-value" id="training-score">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">ACCURACY</div>
+            <div class="stat-value" id="training-accuracy">0%</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">SHOTS</div>
+            <div class="stat-value" id="training-shots">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">HITS</div>
+            <div class="stat-value" id="training-hits">0</div>
+          </div>
+        </div>
+        <button id="btn-training-retry" class="menu-btn primary-btn">RETRY</button>
+        <button id="btn-training-menu" class="menu-btn">BACK TO MENU</button>
+      </div>
+    </div>
+
+    <!-- Scenario End Screen -->
+    <div id="scenario-end-screen" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="gameover-title">DRILL COMPLETE</h2>
+        <div class="grade-display" id="scenario-grade">B</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">SCORE</div>
+            <div class="stat-value" id="scenario-score">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">ACCURACY</div>
+            <div class="stat-value" id="scenario-accuracy">0%</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">KILLS</div>
+            <div class="stat-value" id="scenario-kills">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">AVG REACTION</div>
+            <div class="stat-value" id="scenario-reaction">0ms</div>
+          </div>
+        </div>
+        <div id="scenario-scores" class="highscores-list"></div>
+        <button id="btn-scenario-retry" class="menu-btn primary-btn">RETRY</button>
+        <button id="btn-scenario-menu" class="menu-btn">BACK TO MENU</button>
+      </div>
+    </div>
+
+    <!-- Training HUD -->
+    <div id="training-hud" class="hidden">
+      <div id="crosshair">
+        <div class="crosshair-line top"></div>
+        <div class="crosshair-line right"></div>
+        <div class="crosshair-line bottom"></div>
+        <div class="crosshair-line left"></div>
+        <div class="crosshair-dot"></div>
+      </div>
+      <div id="training-timer-container">
+        <div class="hud-label">TIME</div>
+        <span class="training-timer-value" id="training-timer">0:00</span>
+      </div>
+      <div id="training-score-container">
+        <div class="hud-label">SCORE</div>
+        <span class="training-score-value" id="training-live-score">0</span>
+      </div>
+      <div id="training-accuracy-container">
+        <div class="hud-label">ACCURACY</div>
+        <span class="training-accuracy-value" id="training-live-accuracy">100%</span>
+      </div>
+      <div id="training-kills-container">
+        <div class="hud-label">KILLS</div>
+        <span class="training-kills-value" id="training-live-kills">0</span>
+      </div>
+      <div id="training-ammo-container">
+        <div class="hud-label" id="training-weapon-name">PISTOL</div>
+        <div class="ammo-display">
+          <span class="ammo-current" id="training-ammo-current">12</span>
+          <span class="ammo-divider">/</span>
+          <span class="ammo-reserve" id="training-ammo-reserve">60</span>
+        </div>
+      </div>
+      <div id="hit-marker-training" class="hidden">✕</div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div id="crosshair">
+        <div class="crosshair-line top"></div>
+        <div class="crosshair-line right"></div>
+        <div class="crosshair-line bottom"></div>
+        <div class="crosshair-line left"></div>
+        <div class="crosshair-dot"></div>
+      </div>
+      <div id="health-container">
+        <div class="hud-label">HEALTH</div>
+        <div class="health-bar-bg">
+          <div class="health-bar-fill" id="health-bar"></div>
+        </div>
+        <span class="health-text" id="health-text">100</span>
+      </div>
+      <div id="ammo-container">
+        <div class="hud-label" id="weapon-name">PISTOL</div>
+        <div class="ammo-display">
+          <span class="ammo-current" id="ammo-current">12</span>
+          <span class="ammo-divider">/</span>
+          <span class="ammo-reserve" id="ammo-reserve">60</span>
+        </div>
+      </div>
+      <div id="score-container">
+        <div class="hud-label">KILLS</div>
+        <span class="score-value" id="score-value">0</span>
+      </div>
+      <div id="wave-container">
+        <div class="hud-label">WAVE</div>
+        <span class="wave-value" id="wave-value">1</span>
+      </div>
+      <!-- Grenade Counter -->
+      <div id="grenade-container">
+        <div class="hud-label">GRENADES</div>
+        <span class="grenade-value" id="grenade-value">3</span>
+      </div>
+      <!-- Dash Cooldown -->
+      <div id="dash-container">
+        <div class="hud-label">DASH</div>
+        <div class="dash-bar-bg">
+          <div class="dash-bar-fill" id="dash-bar"></div>
+        </div>
+      </div>
+      <!-- Kill Feed -->
+      <div id="kill-feed"></div>
+      <!-- Combo Counter -->
+      <div id="combo-container" class="hidden">
+        <div class="combo-count" id="combo-count">2x</div>
+        <div class="combo-label">COMBO</div>
+      </div>
+      <div id="damage-overlay"></div>
+      <div id="hit-marker" class="hidden">✕</div>
+    </div>
+
+    <!-- Minimap -->
+    <canvas id="minimap"></canvas>
+
+    <!-- Pause Menu -->
+    <div id="pause-menu" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="pause-title">PAUSED</h2>
+        <button id="btn-resume" class="menu-btn">RESUME</button>
+        <button id="btn-settings-pause" class="menu-btn">⚙ SETTINGS</button>
+        <button id="btn-restart-pause" class="menu-btn">RESTART</button>
+      </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings-screen" class="screen hidden">
+      <div class="menu-content settings-panel">
+        <h2 class="pause-title">SETTINGS</h2>
+        <div class="setting-row">
+          <label class="setting-label">SENSITIVITY</label>
+          <input
+            type="range"
+            id="setting-sensitivity"
+            min="0.5"
+            max="5"
+            step="0.1"
+            value="2"
+            class="setting-slider"
+          />
+          <span class="setting-val" id="setting-sensitivity-val">0.002</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">SFX VOLUME</label>
+          <input
+            type="range"
+            id="setting-sfx"
+            min="0"
+            max="100"
+            step="1"
+            value="50"
+            class="setting-slider"
+          />
+          <span class="setting-val" id="setting-sfx-val">50%</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">MUSIC VOLUME</label>
+          <input
+            type="range"
+            id="setting-music"
+            min="0"
+            max="100"
+            step="1"
+            value="30"
+            class="setting-slider"
+          />
+          <span class="setting-val" id="setting-music-val">30%</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">FOV</label>
+          <input
+            type="range"
+            id="setting-fov"
+            min="60"
+            max="110"
+            step="1"
+            value="75"
+            class="setting-slider"
+          />
+          <span class="setting-val" id="setting-fov-val">75°</span>
+        </div>
+        <button id="btn-settings-back" class="menu-btn primary-btn">
+          BACK
+        </button>
+      </div>
+    </div>
+
+    <!-- High Scores Screen -->
+    <div id="highscores-screen" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="pause-title">HIGH SCORES</h2>
+        <div id="highscores-list" class="highscores-list"></div>
+        <button id="btn-highscores-back" class="menu-btn primary-btn">
+          BACK
+        </button>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over" class="screen hidden">
+      <div class="menu-content">
+        <h2 class="gameover-title">GAME OVER</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">KILLS</div>
+            <div class="stat-value" id="final-kills">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">WAVES</div>
+            <div class="stat-value" id="final-waves">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">TIME</div>
+            <div class="stat-value" id="final-time">0:00</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">BEST COMBO</div>
+            <div class="stat-value" id="final-combo">0</div>
+          </div>
+        </div>
+        <div id="new-highscore" class="hidden">
+          <div class="new-hs-text">🏆 NEW HIGH SCORE!</div>
+        </div>
+        <div id="gameover-scores" class="highscores-list"></div>
+        <button id="btn-restart" class="menu-btn primary-btn">
+          PLAY AGAIN
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

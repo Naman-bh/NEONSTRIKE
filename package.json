@@ -1,0 +1,16 @@
+{
+  "name": "3d-shooter",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cannon-es": "^0.20.0",
+    "howler": "^2.2.4",
+    "three": "^0.172.0",
+    "vite": "^6.2.2"
+  }
+}

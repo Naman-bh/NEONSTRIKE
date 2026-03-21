@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(grep -E \"\\\\.\\(js|ts|json\\)$\")",
+      "Bash(gh auth:*)"
+    ]
+  }
+}
